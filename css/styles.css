@@ -1,0 +1,471 @@
+/**
+ * SISTEMA DE GESTIÓN DE PANADERÍA - ESTILOS PERSONALIZADOS
+ * 
+ * Este archivo contiene todos los estilos personalizados para el sistema
+ * de gestión de panadería, incluyendo temas, animaciones y componentes
+ * específicos para la interfaz de usuario.
+ * 
+ * Estructura:
+ * 1. Variables CSS y configuración global
+ * 2. Estilos de navegación y layout
+ * 3. Componentes personalizados
+ * 4. Animaciones y efectos
+ * 5. Responsive design
+ * 
+ * @author Sistema de Panadería
+ * @version 1.0
+ */
+
+/* ============================================
+   1. VARIABLES CSS Y CONFIGURACIÓN GLOBAL
+   ============================================ */
+
+:root {
+    /* Colores principales del tema panadería */
+    --bakery-primary: #f39c12;     /* Naranja dorado - color principal */
+    --bakery-secondary: #e67e22;   /* Naranja más oscuro */
+    --bakery-tertiary: #d35400;    /* Naranja rojizo */
+    --bakery-light: #fef9e7;       /* Crema claro */
+    --bakery-dark: #8b4513;        /* Marrón oscuro */
+    
+    /* Colores de estado */
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
+    --info-color: #3498db;
+    
+    /* Sombras */
+    --shadow-light: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-medium: 0 4px 8px rgba(0,0,0,0.15);
+    --shadow-heavy: 0 8px 16px rgba(0,0,0,0.2);
+    
+    /* Transiciones */
+    --transition-fast: 0.2s ease-in-out;
+    --transition-medium: 0.3s ease-in-out;
+    --transition-slow: 0.5s ease-in-out;
+}
+
+/* ============================================
+   2. ESTILOS GENERALES Y LAYOUT
+   ============================================ */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--bakery-light) 0%, #fff 100%);
+    min-height: 100vh;
+    color: #2c3e50;
+}
+
+/* Navegación personalizada */
+.navbar {
+    box-shadow: var(--shadow-medium);
+    border-bottom: 3px solid var(--bakery-secondary);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    transition: all var(--transition-fast);
+    border-radius: 5px;
+    margin: 0 2px;
+}
+
+.navbar-nav .nav-link:hover {
+    background-color: rgba(255,255,255,0.2);
+    transform: translateY(-1px);
+}
+
+/* ============================================
+   3. COMPONENTES PERSONALIZADOS
+   ============================================ */
+
+/* Tarjetas del dashboard */
+.card {
+    border: none;
+    border-radius: 15px;
+    box-shadow: var(--shadow-light);
+    transition: all var(--transition-medium);
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-heavy);
+}
+
+.card-header {
+    background: linear-gradient(45deg, var(--bakery-primary), var(--bakery-secondary));
+    color: white;
+    border-bottom: none;
+    font-weight: 600;
+}
+
+/* Botones personalizados */
+.btn {
+    border-radius: 25px;
+    font-weight: 500;
+    padding: 8px 20px;
+    transition: all var(--transition-fast);
+    border: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.btn-warning {
+    background: linear-gradient(45deg, var(--bakery-primary), var(--bakery-secondary));
+    color: white;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(45deg, var(--bakery-secondary), var(--bakery-tertiary));
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+    color: white;
+}
+
+.btn-success {
+    background: linear-gradient(45deg, var(--success-color), #2ecc71);
+    color: white;
+}
+
+.btn-success:hover {
+    color: white;
+}
+
+.btn-danger {
+    background: linear-gradient(45deg, var(--danger-color), #c0392b);
+    color: white;
+}
+
+.btn-danger:hover {
+    color: white;
+}
+
+.btn-info {
+    background: linear-gradient(45deg, var(--info-color), #2980b9);
+    color: white;
+}
+
+.btn-info:hover {
+    color: white;
+}
+
+/* Formularios */
+.form-control, .form-select {
+    border-radius: 10px;
+    border: 2px solid #e9ecef;
+    transition: all var(--transition-fast);
+    padding: 10px 15px;
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: var(--bakery-primary);
+    box-shadow: 0 0 0 0.2rem rgba(243, 156, 18, 0.25);
+}
+
+/* ============================================
+   4. COMPONENTES ESPECÍFICOS DE PANADERÍA
+   ============================================ */
+
+/* Tarjetas de productos */
+.product-card {
+    border: 2px solid var(--bakery-light);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background: white;
+    transition: all var(--transition-medium);
+}
+
+.product-card:hover {
+    border-color: var(--bakery-primary);
+    transform: scale(1.02);
+    box-shadow: var(--shadow-medium);
+}
+
+.product-image {
+    width: 80px;
+    height: 80px;
+    background: linear-gradient(45deg, var(--bakery-light), var(--bakery-primary));
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    color: var(--bakery-dark);
+    margin-bottom: 10px;
+}
+
+/* Indicadores de stock */
+.stock-indicator {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    display: inline-block;
+    margin-right: 5px;
+}
+
+.stock-high { background-color: var(--success-color); }
+.stock-medium { background-color: var(--warning-color); }
+.stock-low { background-color: var(--danger-color); }
+
+/* Badges personalizados */
+.badge-category {
+    background: linear-gradient(45deg, var(--bakery-primary), var(--bakery-secondary));
+    color: white;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* ============================================
+   5. PUNTO DE VENTA
+   ============================================ */
+
+.sale-item {
+    background: var(--bakery-light);
+    border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-left: 4px solid var(--bakery-primary);
+}
+
+.sale-total {
+    background: linear-gradient(45deg, var(--success-color), #2ecc71);
+    color: white;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    box-shadow: var(--shadow-medium);
+}
+
+/* ============================================
+   6. TABLAS PERSONALIZADAS
+   ============================================ */
+
+.table {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow-light);
+}
+
+.table thead th {
+    background: linear-gradient(45deg, var(--bakery-primary), var(--bakery-secondary));
+    color: white;
+    border: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.table tbody tr {
+    transition: all var(--transition-fast);
+}
+
+.table tbody tr:hover {
+    background-color: var(--bakery-light);
+    transform: scale(1.01);
+}
+
+/* ============================================
+   7. ANIMACIONES Y EFECTOS
+   ============================================ */
+
+/* Animación de carga */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp var(--transition-medium) ease-out;
+}
+
+/* Efecto de pulso para notificaciones */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+/* Efecto de rotación para iconos */
+.rotate-on-hover {
+    transition: transform var(--transition-fast);
+}
+
+.rotate-on-hover:hover {
+    transform: rotate(10deg);
+}
+
+/* ============================================
+   8. ALERTAS PERSONALIZADAS
+   ============================================ */
+
+.alert {
+    border: none;
+    border-radius: 15px;
+    box-shadow: var(--shadow-light);
+    border-left: 5px solid;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+    border-left-color: var(--success-color);
+}
+
+.alert-warning {
+    background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+    border-left-color: var(--warning-color);
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+    border-left-color: var(--danger-color);
+}
+
+.alert-info {
+    background: linear-gradient(135deg, #d1ecf1 0%, #bee5eb 100%);
+    border-left-color: var(--info-color);
+}
+
+/* ============================================
+   9. RESPONSIVE DESIGN
+   ============================================ */
+
+@media (max-width: 768px) {
+    .card {
+        margin-bottom: 15px;
+    }
+    
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    
+    .btn {
+        padding: 6px 15px;
+        font-size: 0.9rem;
+    }
+    
+    .product-card {
+        padding: 15px;
+    }
+    
+    .sale-total {
+        padding: 15px;
+        font-size: 1.2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .container-fluid {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+    
+    .card-body {
+        padding: 15px;
+    }
+    
+    .modal-dialog {
+        margin: 10px;
+    }
+}
+
+/* ============================================
+   10. UTILIDADES PERSONALIZADAS
+   ============================================ */
+
+/* Texto con gradiente */
+.text-gradient {
+    background: linear-gradient(45deg, var(--bakery-primary), var(--bakery-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 700;
+}
+
+/* Separadores decorativos */
+.divider {
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--bakery-primary), transparent);
+    margin: 20px 0;
+}
+
+/* Contenedores con efecto glassmorphism */
+.glass-effect {
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    border-radius: 15px;
+}
+
+/* Estados de carga */
+.loading {
+    position: relative;
+    color: transparent;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 2px solid var(--bakery-primary);
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ============================================
+   11. TEMA OSCURO (OPCIONAL)
+   ============================================ */
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bakery-light: #2c3e50;
+        --text-color: #ecf0f1;
+    }
+    
+    body {
+        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        color: var(--text-color);
+    }
+    
+    .card {
+        background-color: #34495e;
+        color: var(--text-color);
+    }
+    
+    .form-control, .form-select {
+        background-color: #2c3e50;
+        border-color: #34495e;
+        color: var(--text-color);
+    }
+}

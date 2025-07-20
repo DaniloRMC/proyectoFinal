@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🛒 Sistema de Ventas - Panadería San José</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- El contenido se carga dinámicamente por JavaScript -->
+    <div id="salesApp">
+        <div class="d-flex justify-content-center align-items-center min-vh-100">
+            <div class="text-center">
+                <div class="spinner-border text-success mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <h4 class="text-muted">🛒 Cargando Sistema de Ventas...</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Sistema de Ventas -->
+    <script>
+        /**
+         * SISTEMA DE VENTAS - PUNTO DE VENTA PARA EMPLEADOS
+         */
+        class SalesApp {
+            constructor() {
+                this.currentUser = null;
+                this.cart = [];
+                this.products = [];
+                this.init();
+            }
+
+            init() {
+                console.log('🛒 Iniciando Sistema de Ventas...');
+                setTimeout(() => {
+                    this.showSalesLogin();
+                    this.bindEvents();
+                }, 500);
+            }
+
+            bindEvents() {
+                document.addEventListener('click', (e) => {
+                    // Login de ventas
+                    if (e.target.id === 'salesLoginBtn') {
+                        e.preventDefault();
+                        this.handleSalesLogin();
+                    }
+                    
+                    // Logout
+                    if (e.target.id === 'salesLogoutBtn') {
+                        e.preventDefault();
+                        this.handleLogout();
+                    }
+
+                    // Agregar producto al carrito
+                    if (e.target.classList.contains('add-to-cart')) {
+                        e.preventDefault();
+                        const productId = e.target.dataset.productId;
+                        this.addToCart(productId);
+                    }
+
+                    // Procesar venta
+                    if (e.target.id === 'processSaleBtn') {
+                        e.preventDefault();
+                        this.processSale();
+                    }
+
+                    // Limpiar carrito
+                    if (e.target.id === 'clearCartBtn') {
+                        e.preventDefault();
+                        this.clearCart();
+                    }
+                });
+
+                // Eventos de cantidad en carrito
+                document.addEventListener('change', (e) => {
+                    if (e.target.classList.contains('cart-quantity')) {
+                        const productId = e.target.dataset.productId;
+                        const quantity = parseInt(e.target.value);
+                        this.updateCartQuantity(productId, quantity);
+                    }
+                });
+            }
+
+            showSalesLogin() {
+                const app = document.getElementById('salesApp');
+                app.innerHTML = `
+                    <div class="min-vh-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #e8f5e8 0%, #28a745 100%);">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="card shadow-lg border-0 rounded-3">
+                                        <div class="card-body p-5">
+                                            <div class="text-center mb-4">
+                                                <i class="fas fa-cash-register fa-3x text-success mb-3"></i>
+                                                <h3 class="fw-bold text-success">🛒 Sistema de Ventas</h3>
+                                                <p class="text-muted">Panadería San José</p>
+                                                <p class="text-muted"><small>Punto de Venta para Empleados</small></p>
+                                            </div>
+                                            
+                                            <form id="salesLoginForm">
+                                                <div class="mb-3">
+                                                    <label for="salesUser" class="form-label">
+                                                        <i class="fas fa-user me-2"></i>Usuario de Ventas
+                                                    </label>
+                                                    <select class="form-select form-select-lg" id="salesUser" required>
+                                                        <option value="">Seleccionar empleado...</option>
+                                                        <option value="vendedor1">María García - Vendedora</option>
+                                                        <option value="vendedor2">Carlos López - Cajero</option>
+                                                        <option value="vendedor3">Ana Martín - Vendedora</option>
+                                                        <option value="supervisor">Luis Rodríguez - Supervisor</option>
+                                                    </select>
+                                                </div>
+                                                
+                                                <div class="mb-4">
+                                                    <label for="salesPin" class="form-label">
+                                                        <i class="fas fa-key me-2"></i>PIN de Acceso
+                                                    </label>
+                                                    <input type="password" class="form-control form-control-lg text-center" 
+                                                           id="salesPin" placeholder="****" maxlength="4" required>
+                                                </div>
+                                                
+                                                <div class="d-grid">
+                                                    <button type="submit" id="salesLoginBtn" class="btn btn-success btn-lg">
+                                                        <i class="fas fa-sign-in-alt me-2"></i>Iniciar Sesión
+                                                    </button>
+                                                </div>
+                                            </form>
+                                            
+                                            <div class="text-center mt-4">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-info-circle me-1"></i>
+                                                    PIN de prueba: 1234 para todos los usuarios
+                                                </small>
+                                            </div>
+
+                                            <hr class="my-4">
+                                            
+                                            <div class="text-center">
+                                                <p class="text-muted mb-2"><small>¿Eres administrador?</small></p>
+                                                <a href="index.html" class="btn btn-outline-primary btn-sm">
+                                                    <i class="fas fa-cog me-1"></i>Acceso Administrativo
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            handleSalesLogin() {
+                const user = document.getElementById('salesUser').value;
+                const pin = document.getElementById('salesPin').value;
+                
+                if (!user) {
+                    this.showToast('Por favor selecciona un empleado', 'warning');
+                    return;
+                }
+
+                if (pin === '1234') {
+                    this.currentUser = {
+                        id: user,
+                        name: document.getElementById('salesUser').selectedOptions[0].text.split(' - ')[0],
+                        role: document.getElementById('salesUser').selectedOptions[0].text.split(' - ')[1]
+                    };
+                    this.showToast('¡Bienvenido al sistema de ventas!', 'success');
+                    this.loadSalesInterface();
+                } else {
+                    this.showToast('PIN incorrecto', 'error');
+                }
+            }
+
+            handleLogout() {
+                this.currentUser = null;
+                this.cart = [];
+                this.showToast('Sesión cerrada correctamente', 'success');
+                this.showSalesLogin();
+            }
+
+            loadSalesInterface() {
+                // Cargar productos demo
+                this.loadProducts();
+                this.showSalesInterface();
+            }
+
+            loadProducts() {
+                this.products = [
+                    { id: 1, name: 'Pan Francés', price: 1.50, category: 'Panes', stock: 25, image: '🥖' },
+                    { id: 2, name: 'Croissant', price: 2.25, category: 'Panes', stock: 15, image: '🥐' },
+                    { id: 3, name: 'Pan Dulce', price: 2.00, category: 'Panes', stock: 20, image: '🍞' },
+                    { id: 4, name: 'Empanada de Pollo', price: 3.50, category: 'Empanadas', stock: 12, image: '🥟' },
+                    { id: 5, name: 'Empanada de Carne', price: 3.75, category: 'Empanadas', stock: 10, image: '🥟' },
+                    { id: 6, name: 'Torta de Chocolate', price: 18.00, category: 'Tortas', stock: 5, image: '🎂' },
+                    { id: 7, name: 'Cheesecake', price: 22.50, category: 'Tortas', stock: 3, image: '🍰' },
+                    { id: 8, name: 'Cookie Chocolate', price: 1.25, category: 'Galletas', stock: 30, image: '🍪' },
+                    { id: 9, name: 'Donut Glaseada', price: 1.75, category: 'Donuts', stock: 18, image: '🍩' },
+                    { id: 10, name: 'Muffin Arándanos', price: 2.50, category: 'Muffins', stock: 14, image: '🧁' }
+                ];
+            }
+
+            showSalesInterface() {
+                const app = document.getElementById('salesApp');
+                app.innerHTML = `
+                    <!-- Header de Ventas -->
+                    <nav class="navbar navbar-expand-lg navbar-dark bg-success shadow-sm">
+                        <div class="container-fluid">
+                            <a class="navbar-brand fw-bold">
+                                <i class="fas fa-cash-register me-2"></i>Sistema de Ventas - Panadería San José
+                            </a>
+                            
+                            <div class="d-flex align-items-center">
+                                <span class="navbar-text me-3">
+                                    <i class="fas fa-user me-1"></i>${this.currentUser.name} (${this.currentUser.role})
+                                </span>
+                                <button class="btn btn-outline-light btn-sm" id="salesLogoutBtn">
+                                    <i class="fas fa-sign-out-alt me-1"></i>Salir
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div class="container-fluid py-3">
+                        <div class="row">
+                            <!-- Productos Disponibles -->
+                            <div class="col-lg-8">
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-store me-2 text-success"></i>
+                                            Productos Disponibles
+                                        </h5>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            ${this.renderProductGrid()}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Carrito de Compras -->
+                            <div class="col-lg-4">
+                                <div class="card shadow-sm">
+                                    <div class="card-header bg-success text-white">
+                                        <h5 class="mb-0">
+                                            <i class="fas fa-shopping-cart me-2"></i>
+                                            Carrito de Compras
+                                            <span class="badge bg-light text-success ms-2">${this.cart.length}</span>
+                                        </h5>
+                                    </div>
+                                    <div class="card-body" style="max-height: 500px; overflow-y: auto;">
+                                        <div id="cartItems">
+                                            ${this.renderCart()}
+                                        </div>
+                                    </div>
+                                    <div class="card-footer bg-white">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <strong>Total: $${this.calculateTotal().toFixed(2)}</strong>
+                                        </div>
+                                        <div class="d-grid gap-2">
+                                            <button class="btn btn-success" id="processSaleBtn" ${this.cart.length === 0 ? 'disabled' : ''}>
+                                                <i class="fas fa-credit-card me-2"></i>Procesar Venta
+                                            </button>
+                                            <button class="btn btn-outline-danger btn-sm" id="clearCartBtn" ${this.cart.length === 0 ? 'disabled' : ''}>
+                                                <i class="fas fa-trash me-2"></i>Limpiar Carrito
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderProductGrid() {
+                return this.products.map(product => `
+                    <div class="col-md-4 col-sm-6 mb-3">
+                        <div class="card h-100 product-card">
+                            <div class="card-body text-center">
+                                <div class="fs-1 mb-2">${product.image}</div>
+                                <h6 class="card-title">${product.name}</h6>
+                                <p class="text-muted mb-1">${product.category}</p>
+                                <h5 class="text-success mb-2">$${product.price.toFixed(2)}</h5>
+                                <p class="text-muted small">Stock: ${product.stock}</p>
+                                <button class="btn btn-outline-success add-to-cart" 
+                                        data-product-id="${product.id}"
+                                        ${product.stock === 0 ? 'disabled' : ''}>
+                                    <i class="fas fa-plus me-1"></i>Agregar
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            renderCart() {
+                if (this.cart.length === 0) {
+                    return '<p class="text-muted text-center">El carrito está vacío</p>';
+                }
+
+                return this.cart.map(item => `
+                    <div class="d-flex justify-content-between align-items-center mb-2 p-2 border rounded">
+                        <div class="flex-grow-1">
+                            <h6 class="mb-0">${item.name}</h6>
+                            <small class="text-muted">$${item.price.toFixed(2)} c/u</small>
+                        </div>
+                        <div class="d-flex align-items-center">
+                            <input type="number" class="form-control form-control-sm cart-quantity me-2" 
+                                   style="width: 60px;" 
+                                   value="${item.quantity}" 
+                                   min="1" 
+                                   max="${item.maxStock}"
+                                   data-product-id="${item.id}">
+                            <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            addToCart(productId) {
+                const product = this.products.find(p => p.id == productId);
+                if (!product || product.stock === 0) return;
+
+                const existingItem = this.cart.find(item => item.id == productId);
+                
+                if (existingItem) {
+                    if (existingItem.quantity < product.stock) {
+                        existingItem.quantity++;
+                        this.showToast(`${product.name} agregado al carrito`, 'success');
+                    } else {
+                        this.showToast('Stock insuficiente', 'warning');
+                    }
+                } else {
+                    this.cart.push({
+                        id: product.id,
+                        name: product.name,
+                        price: product.price,
+                        quantity: 1,
+                        maxStock: product.stock
+                    });
+                    this.showToast(`${product.name} agregado al carrito`, 'success');
+                }
+
+                this.updateCartDisplay();
+            }
+
+            updateCartQuantity(productId, quantity) {
+                const item = this.cart.find(item => item.id == productId);
+                if (item) {
+                    if (quantity <= 0) {
+                        this.cart = this.cart.filter(item => item.id != productId);
+                    } else if (quantity <= item.maxStock) {
+                        item.quantity = quantity;
+                    }
+                    this.updateCartDisplay();
+                }
+            }
+
+            clearCart() {
+                this.cart = [];
+                this.updateCartDisplay();
+                this.showToast('Carrito limpiado', 'info');
+            }
+
+            calculateTotal() {
+                return this.cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+            }
+
+            updateCartDisplay() {
+                const cartItems = document.getElementById('cartItems');
+                if (cartItems) {
+                    cartItems.innerHTML = this.renderCart();
+                }
+
+                // Actualizar total y botones
+                const total = this.calculateTotal();
+                const processSaleBtn = document.getElementById('processSaleBtn');
+                const clearCartBtn = document.getElementById('clearCartBtn');
+                
+                if (processSaleBtn) {
+                    processSaleBtn.disabled = this.cart.length === 0;
+                    processSaleBtn.previousElementSibling.innerHTML = `<strong>Total: $${total.toFixed(2)}</strong>`;
+                }
+                
+                if (clearCartBtn) {
+                    clearCartBtn.disabled = this.cart.length === 0;
+                }
+
+                // Actualizar badge del carrito
+                const badge = document.querySelector('.badge');
+                if (badge) {
+                    badge.textContent = this.cart.length;
+                }
+            }
+
+            processSale() {
+                if (this.cart.length === 0) return;
+
+                const total = this.calculateTotal();
+                const items = this.cart.length;
+
+                // Simular procesamiento de venta
+                this.showToast('Procesando venta...', 'info');
+                
+                setTimeout(() => {
+                    // Reducir stock (simulado)
+                    this.cart.forEach(cartItem => {
+                        const product = this.products.find(p => p.id === cartItem.id);
+                        if (product) {
+                            product.stock -= cartItem.quantity;
+                        }
+                    });
+
+                    // Limpiar carrito
+                    this.cart = [];
+                    
+                    // Mostrar resultado
+                    this.showSaleComplete(total, items);
+                    
+                    // Actualizar interfaz
+                    this.showSalesInterface();
+                }, 2000);
+            }
+
+            showSaleComplete(total, items) {
+                this.showToast(`¡Venta completada! Total: $${total.toFixed(2)} (${items} productos)`, 'success');
+            }
+
+            showToast(message, type = 'info') {
+                let toastContainer = document.getElementById('toastContainer');
+                if (!toastContainer) {
+                    toastContainer = document.createElement('div');
+                    toastContainer.id = 'toastContainer';
+                    toastContainer.className = 'position-fixed top-0 end-0 p-3';
+                    toastContainer.style.zIndex = '1050';
+                    document.body.appendChild(toastContainer);
+                }
+
+                const toastId = 'toast' + Date.now();
+                const bgClass = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : type === 'warning' ? 'bg-warning' : 'bg-info';
+                
+                const toastHtml = `
+                    <div id="${toastId}" class="toast ${bgClass} text-white" role="alert">
+                        <div class="toast-body">
+                            <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : type === 'warning' ? 'exclamation-triangle' : 'info'}-circle me-2"></i>
+                            ${message}
+                        </div>
+                    </div>
+                `;
+
+                toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+                
+                const toastElement = document.getElementById(toastId);
+                const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+                toast.show();
+
+                setTimeout(() => {
+                    toastElement.remove();
+                }, 4000);
+            }
+        }
+
+        // Inicializar aplicación de ventas
+        document.addEventListener('DOMContentLoaded', () => {
+            window.salesApp = new SalesApp();
+        });
+
+        console.log('🛒 Sistema de Ventas cargado correctamente');
+    </script>
+
+    <style>
+        .product-card {
+            transition: transform 0.2s;
+            cursor: pointer;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .cart-quantity {
+            text-align: center;
+        }
+        
+        .bg-gradient-success {
+            background: linear-gradient(135deg, #e8f5e8 0%, #28a745 100%);
+        }
+    </style>
+</body>
+</html>

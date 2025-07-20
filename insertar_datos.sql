@@ -1,0 +1,223 @@
+-- Script para insertar datos de muestra en la base de datos de la panadería
+USE panaderia_db;
+
+-- Deshabilitar verificación de claves foráneas temporalmente
+SET FOREIGN_KEY_CHECKS = 0;
+
+-- Limpiar tablas en orden correcto
+TRUNCATE TABLE venta_detalles;
+TRUNCATE TABLE ventas;
+TRUNCATE TABLE inventario_movimientos;
+TRUNCATE TABLE productos;
+TRUNCATE TABLE empleados;
+TRUNCATE TABLE configuraciones;
+
+-- Habilitar verificación de claves foráneas
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- Insertar 30 empleados con la estructura correcta
+INSERT INTO empleados (nombre, email, telefono, rol, salario, fecha_contratacion, password_hash, estado) VALUES
+('Carlos Mendoza', 'admin@panaderia.com', '555-0001', 'admin', 15000.00, '2023-01-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('María González', 'maria@panaderia.com', '555-0002', 'admin', 12000.00, '2023-02-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Juan López', 'juan@panaderia.com', '555-0003', 'cajero', 8000.00, '2023-02-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Ana Martínez', 'ana@panaderia.com', '555-0004', 'vendedor', 7500.00, '2023-03-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Pedro Rodríguez', 'pedro@panaderia.com', '555-0005', 'panadero', 9500.00, '2023-03-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Laura Sánchez', 'laura@panaderia.com', '555-0006', 'cajero', 8000.00, '2023-04-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Diego Torres', 'diego@panaderia.com', '555-0007', 'vendedor', 7500.00, '2023-04-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Carmen Vargas', 'carmen@panaderia.com', '555-0008', 'panadero', 9500.00, '2023-05-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Roberto Jiménez', 'roberto@panaderia.com', '555-0009', 'cajero', 8000.00, '2023-05-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Elena Morales', 'elena@panaderia.com', '555-0010', 'vendedor', 7500.00, '2023-06-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Fernando Castro', 'fernando@panaderia.com', '555-0011', 'panadero', 9500.00, '2023-06-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Patricia Ruiz', 'patricia@panaderia.com', '555-0012', 'cajero', 8000.00, '2023-07-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Andrés Herrera', 'andres@panaderia.com', '555-0013', 'vendedor', 7500.00, '2023-07-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Isabel Peña', 'isabel@panaderia.com', '555-0014', 'admin', 12000.00, '2023-08-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Javier Ortega', 'javier@panaderia.com', '555-0015', 'panadero', 9500.00, '2023-08-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Lucía Vega', 'lucia@panaderia.com', '555-0016', 'cajero', 8000.00, '2023-09-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Manuel Silva', 'manuel@panaderia.com', '555-0017', 'vendedor', 7500.00, '2023-09-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Rosa Guerrero', 'rosa@panaderia.com', '555-0018', 'panadero', 9500.00, '2023-10-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Sergio Medina', 'sergio@panaderia.com', '555-0019', 'cajero', 8000.00, '2023-10-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Adriana Romero', 'adriana@panaderia.com', '555-0020', 'vendedor', 7500.00, '2023-11-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Ricardo Aguilar', 'ricardo@panaderia.com', '555-0021', 'panadero', 9500.00, '2023-11-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Sofía Delgado', 'sofia@panaderia.com', '555-0022', 'cajero', 8000.00, '2023-12-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Raúl Navarro', 'raul@panaderia.com', '555-0023', 'vendedor', 7500.00, '2023-12-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Beatriz Ramos', 'beatriz@panaderia.com', '555-0024', 'admin', 12000.00, '2024-01-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Tomás Iglesias', 'tomas@panaderia.com', '555-0025', 'panadero', 9500.00, '2024-01-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Natalia Fuentes', 'natalia@panaderia.com', '555-0026', 'cajero', 8000.00, '2024-02-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Guillermo Campos', 'guillermo@panaderia.com', '555-0027', 'vendedor', 7500.00, '2024-02-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Daniela Molina', 'daniela@panaderia.com', '555-0028', 'panadero', 9500.00, '2024-03-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Héctor Contreras', 'hector@panaderia.com', '555-0029', 'cajero', 8000.00, '2024-03-15', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo'),
+('Valeria Mendez', 'valeria@panaderia.com', '555-0030', 'vendedor', 7500.00, '2024-04-01', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'activo');
+
+-- Insertar 35 productos
+INSERT INTO productos (nombre, descripcion, precio, categoria_id, stock_actual, stock_minimo, stock_maximo, codigo_barras, imagen, estado) VALUES
+('Pan Integral', 'Pan integral artesanal con semillas', 45.00, 9, 25, 5, 50, '7891234567890', 'pan_integral.jpg', 'activo'),
+('Croissant de Mantequilla', 'Croissant francés tradicional', 35.00, 10, 20, 3, 40, '7891234567891', 'croissant.jpg', 'activo'),
+('Pastel de Chocolate', 'Pastel húmedo de chocolate con ganache', 450.00, 3, 8, 2, 15, '7891234567892', 'pastel_chocolate.jpg', 'activo'),
+('Galletas de Avena', 'Galletas caseras con avena y pasas', 25.00, 4, 40, 10, 80, '7891234567893', 'galletas_avena.jpg', 'activo'),
+('Café Americano', 'Café recién molido y preparado', 30.00, 5, 100, 20, 200, '7891234567894', 'cafe_americano.jpg', 'activo'),
+('Empanada de Pollo', 'Empanada horneada rellena de pollo', 55.00, 6, 15, 5, 30, '7891234567895', 'empanada_pollo.jpg', 'activo'),
+('Sandwich Jamón y Queso', 'Sandwich en pan artesanal', 75.00, 7, 12, 3, 25, '7891234567896', 'sandwich.jpg', 'activo'),
+('Éclair de Vainilla', 'Éclair relleno de crema de vainilla', 65.00, 8, 10, 2, 20, '7891234567897', 'eclair.jpg', 'activo'),
+('Pan de Masa Madre', 'Pan artesanal con masa madre natural', 50.00, 26, 18, 4, 35, '7891234567898', 'pan_masa_madre.jpg', 'activo'),
+('Dona Glaseada', 'Dona esponjosa con glaseado dulce', 40.00, 11, 30, 8, 60, '7891234567899', 'dona_glaseada.jpg', 'activo'),
+('Muffin de Arándanos', 'Muffin esponjoso con arándanos frescos', 42.00, 12, 25, 6, 50, '7891234567900', 'muffin_arandanos.jpg', 'activo'),
+('Tarta de Manzana', 'Tarta casera con manzanas caramelizadas', 380.00, 13, 6, 1, 12, '7891234567901', 'tarta_manzana.jpg', 'activo'),
+('Brownie de Chocolate', 'Brownie húmedo con nueces', 38.00, 14, 22, 5, 45, '7891234567902', 'brownie.jpg', 'activo'),
+('Pan sin Gluten', 'Pan especial para celíacos', 60.00, 16, 12, 3, 25, '7891234567903', 'pan_sin_gluten.jpg', 'activo'),
+('Rosca de Reyes', 'Rosca tradicional de temporada', 250.00, 17, 5, 1, 10, '7891234567904', 'rosca_reyes.jpg', 'activo'),
+('Cupcake Infantil', 'Cupcake decorado para niños', 48.00, 18, 20, 5, 40, '7891234567905', 'cupcake_infantil.jpg', 'activo'),
+('Pan Light', 'Pan bajo en calorías y grasas', 52.00, 19, 15, 4, 30, '7891234567906', 'pan_light.jpg', 'activo'),
+('Baguette Tradicional', 'Baguette francesa artesanal', 42.00, 20, 18, 5, 35, '7891234567907', 'baguette.jpg', 'activo'),
+('Cheesecake Frutos Rojos', 'Cheesecake gourmet premium', 520.00, 21, 4, 1, 8, '7891234567908', 'cheesecake.jpg', 'activo'),
+('Pretzel Alemán', 'Pretzel tradicional alemán', 38.00, 22, 16, 4, 32, '7891234567909', 'pretzel.jpg', 'activo'),
+('Pan del Día', 'Pan fresco elaborado diariamente', 28.00, 23, 35, 10, 70, '7891234567910', 'pan_dia.jpg', 'activo'),
+('Empanada Congelada', 'Empanada lista para hornear', 45.00, 24, 25, 8, 50, '7891234567911', 'empanada_congelada.jpg', 'activo'),
+('Concha Rellena', 'Concha tradicional con relleno', 48.00, 25, 20, 6, 40, '7891234567912', 'concha_rellena.jpg', 'activo'),
+('Cappuccino', 'Cappuccino con espuma de leche', 45.00, 5, 80, 15, 160, '7891234567913', 'cappuccino.jpg', 'activo'),
+('Tarta Vegana', 'Tarta sin ingredientes de origen animal', 420.00, 15, 3, 1, 6, '7891234567914', 'tarta_vegana.jpg', 'activo'),
+('Bagel Integral', 'Bagel integral con semillas de sésamo', 40.00, 9, 22, 6, 44, '7891234567915', 'bagel_integral.jpg', 'activo'),
+('Pie de Limón', 'Pie cremoso de limón con merengue', 350.00, 13, 5, 1, 10, '7891234567916', 'pie_limon.jpg', 'activo'),
+('Hot Dog Gourmet', 'Hot dog con pan artesanal', 85.00, 7, 10, 3, 20, '7891234567917', 'hotdog.jpg', 'activo'),
+('Pan Dulce Promoción', 'Pan dulce en oferta especial', 22.00, 28, 45, 12, 90, '7891234567918', 'pan_dulce_promo.jpg', 'activo'),
+('Canapés Catering', 'Variedad de canapés para eventos', 15.00, 29, 50, 15, 100, '7891234567919', 'canapes.jpg', 'activo'),
+('Torta Especial Casa', 'Torta signature de la panadería', 680.00, 30, 2, 1, 4, '7891234567920', 'torta_especial.jpg', 'activo'),
+('Pan Francés', 'Pan francés crujiente por fuera', 38.00, 2, 24, 6, 48, '7891234567921', 'pan_frances.jpg', 'activo'),
+('Milhojas', 'Milhojas con crema pastelera', 72.00, 8, 8, 2, 16, '7891234567922', 'milhojas.jpg', 'activo'),
+('Panqué de Vainilla', 'Panqué esponjoso casero', 180.00, 1, 6, 2, 12, '7891234567923', 'panque_vainilla.jpg', 'activo'),
+('Smoothie de Frutas', 'Smoothie natural de temporada', 55.00, 5, 20, 5, 40, '7891234567924', 'smoothie.jpg', 'activo');
+
+-- Insertar 30 ventas
+INSERT INTO ventas (empleado_id, fecha, total, metodo_pago, estado, cliente_nombre, cliente_telefono) VALUES
+(3, '2024-04-01 08:30:00', 185.00, 'efectivo', 'completada', 'María García', '555-1001'),
+(4, '2024-04-01 09:15:00', 320.00, 'tarjeta', 'completada', 'Carlos Ruiz', '555-1002'),
+(6, '2024-04-01 10:00:00', 95.00, 'efectivo', 'completada', 'Ana López', '555-1003'),
+(3, '2024-04-01 11:30:00', 450.00, 'tarjeta', 'completada', 'Pedro Martín', '555-1004'),
+(4, '2024-04-01 14:00:00', 275.00, 'efectivo', 'completada', 'Laura Sánchez', '555-1005'),
+(6, '2024-04-02 08:45:00', 160.00, 'tarjeta', 'completada', 'Diego Torres', '555-1006'),
+(3, '2024-04-02 09:30:00', 380.00, 'efectivo', 'completada', 'Carmen Vargas', '555-1007'),
+(4, '2024-04-02 10:15:00', 125.00, 'tarjeta', 'completada', 'Roberto Jiménez', '555-1008'),
+(6, '2024-04-02 11:00:00', 220.00, 'efectivo', 'completada', 'Elena Morales', '555-1009'),
+(3, '2024-04-02 15:30:00', 340.00, 'tarjeta', 'completada', 'Fernando Castro', '555-1010'),
+(4, '2024-04-03 08:00:00', 195.00, 'efectivo', 'completada', 'Patricia Ruiz', '555-1011'),
+(6, '2024-04-03 09:45:00', 285.00, 'tarjeta', 'completada', 'Andrés Herrera', '555-1012'),
+(3, '2024-04-03 10:30:00', 155.00, 'efectivo', 'completada', 'Isabel Peña', '555-1013'),
+(4, '2024-04-03 12:00:00', 415.00, 'tarjeta', 'completada', 'Javier Ortega', '555-1014'),
+(6, '2024-04-03 14:15:00', 240.00, 'efectivo', 'completada', 'Lucía Vega', '555-1015'),
+(3, '2024-04-04 08:15:00', 305.00, 'tarjeta', 'completada', 'Manuel Silva', '555-1016'),
+(4, '2024-04-04 09:00:00', 175.00, 'efectivo', 'completada', 'Rosa Guerrero', '555-1017'),
+(6, '2024-04-04 10:45:00', 265.00, 'tarjeta', 'completada', 'Sergio Medina', '555-1018'),
+(3, '2024-04-04 11:30:00', 385.00, 'efectivo', 'completada', 'Adriana Romero', '555-1019'),
+(4, '2024-04-04 13:00:00', 210.00, 'tarjeta', 'completada', 'Ricardo Aguilar', '555-1020'),
+(6, '2024-04-05 08:30:00', 295.00, 'efectivo', 'completada', 'Sofía Delgado', '555-1021'),
+(3, '2024-04-05 09:15:00', 165.00, 'tarjeta', 'completada', 'Raúl Navarro', '555-1022'),
+(4, '2024-04-05 10:00:00', 355.00, 'efectivo', 'completada', 'Beatriz Ramos', '555-1023'),
+(6, '2024-04-05 11:45:00', 225.00, 'tarjeta', 'completada', 'Tomás Iglesias', '555-1024'),
+(3, '2024-04-05 14:30:00', 445.00, 'efectivo', 'completada', 'Natalia Fuentes', '555-1025'),
+(4, '2024-04-06 08:00:00', 185.00, 'tarjeta', 'completada', 'Guillermo Campos', '555-1026'),
+(6, '2024-04-06 09:30:00', 315.00, 'efectivo', 'completada', 'Daniela Molina', '555-1027'),
+(3, '2024-04-06 10:15:00', 255.00, 'tarjeta', 'completada', 'Héctor Contreras', '555-1028'),
+(4, '2024-04-06 12:00:00', 375.00, 'efectivo', 'completada', 'Valeria Méndez', '555-1029'),
+(6, '2024-04-06 15:00:00', 195.00, 'tarjeta', 'completada', 'Cliente Frecuente', '555-1030');
+
+-- Insertar detalles de ventas
+INSERT INTO venta_detalles (venta_id, producto_id, cantidad, precio_unitario, subtotal) VALUES
+(1, 1, 2, 45.00, 90.00), (1, 2, 1, 35.00, 35.00), (1, 5, 2, 30.00, 60.00),
+(2, 3, 1, 450.00, 450.00),
+(3, 4, 2, 25.00, 50.00), (3, 6, 1, 45.00, 45.00),
+(4, 3, 1, 450.00, 450.00),
+(5, 12, 1, 380.00, 380.00),
+(6, 1, 2, 45.00, 90.00), (6, 10, 1, 40.00, 40.00), (6, 5, 1, 30.00, 30.00),
+(7, 12, 1, 380.00, 380.00),
+(8, 7, 1, 75.00, 75.00), (8, 1, 1, 50.00, 50.00),
+(9, 9, 2, 50.00, 100.00), (9, 11, 2, 42.00, 84.00), (9, 2, 1, 36.00, 36.00),
+(10, 19, 1, 340.00, 340.00),
+(11, 1, 3, 45.00, 135.00), (11, 5, 2, 30.00, 60.00),
+(12, 15, 1, 250.00, 250.00), (12, 2, 1, 35.00, 35.00),
+(13, 7, 2, 75.00, 150.00), (13, 24, 1, 5.00, 5.00),
+(14, 31, 1, 415.00, 415.00),
+(15, 1, 2, 45.00, 90.00), (15, 4, 4, 25.00, 100.00), (15, 1, 1, 50.00, 50.00),
+(16, 9, 4, 50.00, 200.00), (16, 2, 3, 35.00, 105.00),
+(17, 6, 2, 55.00, 110.00), (17, 8, 1, 65.00, 65.00),
+(18, 13, 1, 38.00, 38.00), (18, 1, 5, 45.00, 225.00), (18, 24, 1, 2.00, 2.00),
+(19, 12, 1, 380.00, 380.00), (19, 24, 1, 5.00, 5.00),
+(20, 18, 2, 42.00, 84.00), (20, 1, 3, 42.00, 126.00),
+(21, 27, 1, 295.00, 295.00),
+(22, 20, 3, 38.00, 114.00), (22, 5, 2, 25.50, 51.00),
+(23, 19, 1, 355.00, 355.00),
+(24, 1, 4, 45.00, 180.00), (24, 5, 2, 22.50, 45.00),
+(25, 3, 1, 445.00, 445.00),
+(26, 11, 3, 42.00, 126.00), (26, 4, 2, 25.00, 50.00), (26, 24, 1, 9.00, 9.00),
+(27, 16, 4, 48.00, 192.00), (27, 2, 4, 30.75, 123.00),
+(28, 17, 3, 52.00, 156.00), (28, 5, 3, 30.00, 90.00), (28, 24, 1, 9.00, 9.00),
+(29, 25, 1, 375.00, 375.00),
+(30, 1, 3, 45.00, 135.00), (30, 4, 2, 25.00, 50.00), (30, 24, 1, 10.00, 10.00);
+
+-- Insertar movimientos de inventario
+INSERT INTO inventario_movimientos (producto_id, tipo_movimiento, cantidad, motivo, empleado_id, fecha, costo_unitario, precio_venta, lote, fecha_vencimiento) VALUES
+(1, 'entrada', 50, 'Reposición de stock', 5, '2024-04-01 06:00:00', 25.00, 45.00, 'LT001', '2024-04-08'),
+(2, 'entrada', 40, 'Reposición de stock', 8, '2024-04-01 06:00:00', 20.00, 35.00, 'LT002', '2024-04-03'),
+(3, 'entrada', 15, 'Producción diaria', 11, '2024-04-01 06:00:00', 200.00, 450.00, 'LT003', '2024-04-05'),
+(4, 'entrada', 80, 'Producción diaria', 15, '2024-04-01 06:00:00', 12.00, 25.00, 'LT004', '2024-04-10'),
+(5, 'entrada', 200, 'Compra de insumos', 1, '2024-04-01 06:00:00', 15.00, 30.00, 'LT005', '2024-04-30'),
+(6, 'entrada', 30, 'Producción diaria', 18, '2024-04-01 06:00:00', 30.00, 55.00, 'LT006', '2024-04-03'),
+(7, 'entrada', 25, 'Producción diaria', 21, '2024-04-01 06:00:00', 40.00, 75.00, 'LT007', '2024-04-02'),
+(8, 'entrada', 20, 'Producción diaria', 25, '2024-04-01 06:00:00', 35.00, 65.00, 'LT008', '2024-04-04'),
+(9, 'entrada', 35, 'Producción diaria', 28, '2024-04-01 06:00:00', 28.00, 50.00, 'LT009', '2024-04-06'),
+(10, 'entrada', 60, 'Producción diaria', 5, '2024-04-01 06:00:00', 22.00, 40.00, 'LT010', '2024-04-05'),
+(1, 'salida', 2, 'Venta #1', 3, '2024-04-01 08:30:00', 25.00, 45.00, 'LT001', '2024-04-08'),
+(2, 'salida', 1, 'Venta #1', 3, '2024-04-01 08:30:00', 20.00, 35.00, 'LT002', '2024-04-03'),
+(5, 'salida', 2, 'Venta #1', 3, '2024-04-01 08:30:00', 15.00, 30.00, 'LT005', '2024-04-30'),
+(3, 'salida', 1, 'Venta #2', 4, '2024-04-01 09:15:00', 200.00, 450.00, 'LT003', '2024-04-05'),
+(4, 'salida', 2, 'Venta #3', 6, '2024-04-01 10:00:00', 12.00, 25.00, 'LT004', '2024-04-10'),
+(6, 'salida', 1, 'Venta #3', 6, '2024-04-01 10:00:00', 30.00, 55.00, 'LT006', '2024-04-03'),
+(3, 'salida', 1, 'Venta #4', 3, '2024-04-01 11:30:00', 200.00, 450.00, 'LT003', '2024-04-05'),
+(7, 'salida', 1, 'Venta #8', 4, '2024-04-02 10:15:00', 40.00, 75.00, 'LT007', '2024-04-02'),
+(1, 'salida', 1, 'Venta #8', 4, '2024-04-02 10:15:00', 25.00, 45.00, 'LT001', '2024-04-08'),
+(9, 'salida', 2, 'Venta #9', 6, '2024-04-02 11:00:00', 28.00, 50.00, 'LT009', '2024-04-06'),
+(11, 'entrada', 50, 'Producción diaria', 8, '2024-04-02 06:00:00', 25.00, 42.00, 'LT011', '2024-04-07'),
+(12, 'entrada', 12, 'Producción diaria', 11, '2024-04-02 06:00:00', 220.00, 380.00, 'LT012', '2024-04-06'),
+(13, 'entrada', 45, 'Producción diaria', 15, '2024-04-02 06:00:00', 20.00, 38.00, 'LT013', '2024-04-09'),
+(14, 'entrada', 25, 'Reposición de stock', 18, '2024-04-02 06:00:00', 35.00, 60.00, 'LT014', '2024-04-12'),
+(15, 'entrada', 10, 'Producción especial', 21, '2024-04-02 06:00:00', 150.00, 250.00, 'LT015', '2024-04-10'),
+(2, 'salida', 3, 'Producto vencido', 25, '2024-04-03 18:00:00', 20.00, 35.00, 'LT002', '2024-04-03'),
+(6, 'salida', 2, 'Producto dañado', 28, '2024-04-03 18:00:00', 30.00, 55.00, 'LT006', '2024-04-03'),
+(7, 'salida', 1, 'Muestra gratis', 5, '2024-04-03 12:00:00', 40.00, 75.00, 'LT007', '2024-04-02'),
+(16, 'entrada', 40, 'Producción diaria', 8, '2024-04-03 06:00:00', 28.00, 48.00, 'LT016', '2024-04-08'),
+(17, 'entrada', 30, 'Producción diaria', 11, '2024-04-03 06:00:00', 30.00, 52.00, 'LT017', '2024-04-10');
+
+-- Insertar configuraciones del sistema
+INSERT INTO configuraciones (clave, valor, descripcion, tipo) VALUES
+('nombre_panaderia', 'Panadería Artesanal El Buen Pan', 'Nombre oficial de la panadería', 'texto'),
+('direccion', 'Av. Principal 123, Col. Centro', 'Dirección física del establecimiento', 'texto'),
+('telefono', '555-0100', 'Teléfono principal de contacto', 'texto'),
+('email', 'contacto@panaderia.com', 'Email de contacto principal', 'email'),
+('rfc', 'PAN123456789', 'RFC de la empresa', 'texto'),
+('iva_porcentaje', '16', 'Porcentaje de IVA aplicable', 'numero'),
+('moneda', 'MXN', 'Moneda utilizada en el sistema', 'texto'),
+('zona_horaria', 'America/Mexico_City', 'Zona horaria del establecimiento', 'texto'),
+('horario_apertura', '06:00', 'Hora de apertura diaria', 'hora'),
+('horario_cierre', '20:00', 'Hora de cierre diaria', 'hora'),
+('dias_laborales', 'Lunes,Martes,Miércoles,Jueves,Viernes,Sábado', 'Días de operación', 'lista'),
+('stock_minimo_global', '5', 'Stock mínimo por defecto para productos', 'numero'),
+('descuento_empleados', '10', 'Porcentaje de descuento para empleados', 'numero'),
+('puntos_por_peso', '1', 'Puntos de lealtad por peso gastado', 'numero'),
+('backup_automatico', '1', 'Activar backup automático (1=sí, 0=no)', 'boolean'),
+('notificaciones_stock', '1', 'Notificar cuando el stock esté bajo', 'boolean'),
+('formato_fecha', 'd/m/Y', 'Formato de fecha para reportes', 'texto'),
+('decimales_precio', '2', 'Número de decimales en precios', 'numero'),
+('precio_delivery', '25', 'Costo de servicio a domicilio', 'numero'),
+('tiempo_sesion', '480', 'Tiempo de sesión en minutos', 'numero'),
+('logo_url', 'assets/img/logo.png', 'URL del logo de la panadería', 'url'),
+('facebook_url', 'https://facebook.com/panaderia', 'URL de Facebook', 'url'),
+('instagram_url', 'https://instagram.com/panaderia', 'URL de Instagram', 'url'),
+('whatsapp', '5550100', 'Número de WhatsApp para pedidos', 'texto'),
+('mensaje_bienvenida', '¡Bienvenido a Panadería El Buen Pan!', 'Mensaje de bienvenida en el sistema', 'texto'),
+('politica_devoluciones', '24', 'Horas límite para devoluciones', 'numero'),
+('descuento_mayoreo', '15', 'Descuento por compra mayoreo (>20 items)', 'numero'),
+('clave_wifi', 'PanWifi2024', 'Clave WiFi para clientes', 'texto'),
+('capacidad_salon', '30', 'Capacidad máxima del salón', 'numero'),
+('version_sistema', '1.0.0', 'Versión actual del sistema', 'texto'),
+('ultima_actualizacion', '2024-04-01', 'Fecha de última actualización', 'fecha');
+
+-- Mensaje de confirmación
+SELECT 'Base de datos poblada exitosamente con datos de muestra' AS mensaje;

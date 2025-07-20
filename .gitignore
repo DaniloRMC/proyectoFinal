@@ -1,0 +1,50 @@
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+*.log
+
+# Archivos de configuración local
+config.local.php
+.env
+
+# Archivos temporales
+*.tmp
+*.temp
+*~
+
+# Archivos de IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Logs del sistema
+logs/
+*.log
+
+# Archivos de backup
+*.bak
+*.backup
+
+# Archivos de caché
+cache/
+tmp/
+
+# Archivos sensibles (mantener la estructura pero sin datos reales)
+# api/config/database.php (mantener plantilla)
+
+# Node modules (si se usara npm)
+node_modules/
+
+# Archivos de sistema Windows
+Desktop.ini
+ehthumbs.db
+
+# Archivos de sistema Mac
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Archivos de sistema Linux
+*~
+.fuse_hidden*
+.Trash-*

@@ -1,0 +1,1100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🍞 Panel de Administración - Panadería San José</title>
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js para gráficos -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div id="adminApp">
+        <div class="d-flex justify-content-center align-items-center min-vh-100">
+            <div class="text-center">
+                <div class="spinner-border text-warning mb-3" role="status" style="width: 3rem; height: 3rem;">
+                    <span class="visually-hidden">Cargando...</span>
+                </div>
+                <h4 class="text-muted">🍞 Cargando Panel de Administración...</h4>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Sistema de Administración Completo -->
+    <script>
+        /**
+         * PANEL DE ADMINISTRACIÓN COMPLETO - PANADERÍA SAN JOSÉ
+         * Control total de ventas, inventario, empleados y finanzas
+         */
+        class AdminPanel {
+            constructor() {
+                this.currentUser = null;
+                this.currentSection = 'dashboard';
+                this.salesData = [];
+                this.inventoryData = [];
+                this.employeeActivity = [];
+                this.init();
+            }
+
+            init() {
+                console.log('🔐 Iniciando Panel de Administración...');
+                setTimeout(() => {
+                    this.showAdminLogin();
+                    this.bindEvents();
+                    this.loadMockData();
+                }, 500);
+            }
+
+            bindEvents() {
+                document.addEventListener('click', (e) => {
+                    // Login de administrador
+                    if (e.target.id === 'adminLoginBtn') {
+                        e.preventDefault();
+                        this.handleAdminLogin();
+                    }
+                    
+                    // Logout
+                    if (e.target.id === 'adminLogoutBtn') {
+                        e.preventDefault();
+                        this.handleLogout();
+                    }
+
+                    // Navegación entre secciones
+                    if (e.target.classList.contains('nav-section')) {
+                        e.preventDefault();
+                        const section = e.target.dataset.section;
+                        this.navigateToSection(section);
+                    }
+
+                    // Acciones específicas
+                    if (e.target.id === 'exportSalesBtn') {
+                        this.exportSalesReport();
+                    }
+
+                    if (e.target.id === 'refreshDataBtn') {
+                        this.refreshAllData();
+                    }
+                });
+            }
+
+            loadMockData() {
+                // Datos de ventas simulados (últimos 30 días)
+                this.salesData = [
+                    { id: 1, fecha: '2025-07-20', empleado: 'María García', total: 245.50, productos: 18, hora: '09:15' },
+                    { id: 2, fecha: '2025-07-20', empleado: 'Carlos López', total: 180.25, productos: 12, hora: '10:30' },
+                    { id: 3, fecha: '2025-07-20', empleado: 'Ana Martín', total: 320.75, productos: 25, hora: '11:45' },
+                    { id: 4, fecha: '2025-07-19', empleado: 'María García', total: 195.80, productos: 15, hora: '14:20' },
+                    { id: 5, fecha: '2025-07-19', empleado: 'Luis Rodríguez', total: 450.00, productos: 35, hora: '16:10' },
+                    { id: 6, fecha: '2025-07-18', empleado: 'Carlos López', total: 275.30, productos: 20, hora: '12:30' },
+                    { id: 7, fecha: '2025-07-18', empleado: 'Ana Martín', total: 380.45, productos: 28, hora: '15:45' }
+                ];
+
+                // Datos de inventario
+                this.inventoryData = [
+                    { id: 1, producto: 'Pan Francés', stock: 25, minimo: 15, precio: 1.50, categoria: 'Panes', ultimaEntrada: '2025-07-19' },
+                    { id: 2, producto: 'Croissant', stock: 8, minimo: 12, precio: 2.25, categoria: 'Panes', ultimaEntrada: '2025-07-18' },
+                    { id: 3, producto: 'Empanada Pollo', stock: 15, minimo: 10, precio: 3.50, categoria: 'Empanadas', ultimaEntrada: '2025-07-20' },
+                    { id: 4, producto: 'Torta Chocolate', stock: 3, minimo: 5, precio: 18.00, categoria: 'Tortas', ultimaEntrada: '2025-07-17' },
+                    { id: 5, producto: 'Donut Glaseada', stock: 22, minimo: 15, precio: 1.75, categoria: 'Donuts', ultimaEntrada: '2025-07-20' }
+                ];
+
+                // Actividad de empleados
+                this.employeeActivity = [
+                    { empleado: 'María García', ventasHoy: 4, totalHoy: 441.30, horasTrabajaadas: 8, eficiencia: 95 },
+                    { empleado: 'Carlos López', ventasHoy: 2, totalHoy: 455.55, horasTrabajaadas: 8, eficiencia: 88 },
+                    { empleado: 'Ana Martín', ventasHoy: 3, totalHoy: 701.20, horasTrabajaadas: 7.5, eficiencia: 98 },
+                    { empleado: 'Luis Rodríguez', ventasHoy: 1, totalHoy: 450.00, horasTrabajaadas: 4, eficiencia: 92 }
+                ];
+            }
+
+            showAdminLogin() {
+                const app = document.getElementById('adminApp');
+                app.innerHTML = `
+                    <div class="min-vh-100 d-flex align-items-center justify-content-center" style="background: linear-gradient(135deg, #fff3e0 0%, #ff8c00 100%);">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="card shadow-lg border-0 rounded-3">
+                                        <div class="card-body p-5">
+                                            <div class="text-center mb-4">
+                                                <i class="fas fa-crown fa-3x text-warning mb-3"></i>
+                                                <h3 class="fw-bold text-primary">🔐 Panel de Administración</h3>
+                                                <p class="text-muted">Panadería San José</p>
+                                                <p class="text-muted"><small>Control Total del Negocio</small></p>
+                                            </div>
+                                            
+                                            <form id="adminLoginForm">
+                                                <div class="mb-3">
+                                                    <label for="adminEmail" class="form-label">
+                                                        <i class="fas fa-envelope me-2"></i>Correo de Administrador
+                                                    </label>
+                                                    <input type="email" class="form-control form-control-lg" 
+                                                           id="adminEmail" value="admin@panaderia.com" required>
+                                                </div>
+                                                
+                                                <div class="mb-4">
+                                                    <label for="adminPassword" class="form-label">
+                                                        <i class="fas fa-lock me-2"></i>Contraseña Maestra
+                                                    </label>
+                                                    <input type="password" class="form-control form-control-lg" 
+                                                           id="adminPassword" value="admin123" required>
+                                                </div>
+                                                
+                                                <div class="d-grid">
+                                                    <button type="submit" id="adminLoginBtn" class="btn btn-warning btn-lg">
+                                                        <i class="fas fa-sign-in-alt me-2"></i>Acceso Administrativo
+                                                    </button>
+                                                </div>
+                                            </form>
+                                            
+                                            <div class="text-center mt-4">
+                                                <small class="text-muted">
+                                                    <i class="fas fa-info-circle me-1"></i>
+                                                    Admin: admin@panaderia.com / admin123
+                                                </small>
+                                            </div>
+
+                                            <hr class="my-4">
+                                            
+                                            <div class="text-center">
+                                                <p class="text-muted mb-2"><small>Acceso para empleados</small></p>
+                                                <a href="login_ventas.html" class="btn btn-outline-success btn-sm me-2">
+                                                    <i class="fas fa-cash-register me-1"></i>Sistema de Ventas
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            handleAdminLogin() {
+                const email = document.getElementById('adminEmail').value;
+                const password = document.getElementById('adminPassword').value;
+                
+                if (email === 'admin@panaderia.com' && password === 'admin123') {
+                    this.currentUser = {
+                        name: 'Administrador Principal',
+                        email: email,
+                        role: 'Super Admin',
+                        permissions: ['all']
+                    };
+                    this.showToast('¡Bienvenido al Panel de Administración!', 'success');
+                    this.showAdminPanel();
+                } else {
+                    this.showToast('Credenciales de administrador incorrectas', 'error');
+                }
+            }
+
+            handleLogout() {
+                this.currentUser = null;
+                this.currentSection = 'dashboard';
+                this.showToast('Sesión administrativa cerrada', 'success');
+                this.showAdminLogin();
+            }
+
+            showAdminPanel() {
+                const app = document.getElementById('adminApp');
+                app.innerHTML = `
+                    <!-- Navbar Administrativo -->
+                    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
+                        <div class="container-fluid">
+                            <a class="navbar-brand fw-bold">
+                                <i class="fas fa-crown me-2"></i>Panel de Administración - Panadería San José
+                            </a>
+                            
+                            <div class="d-flex align-items-center">
+                                <span class="navbar-text me-3">
+                                    <i class="fas fa-user-crown me-1"></i>${this.currentUser.name}
+                                </span>
+                                <button class="btn btn-outline-light btn-sm me-2" id="refreshDataBtn">
+                                    <i class="fas fa-sync-alt me-1"></i>Actualizar
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm" id="adminLogoutBtn">
+                                    <i class="fas fa-sign-out-alt me-1"></i>Cerrar Sesión
+                                </button>
+                            </div>
+                        </div>
+                    </nav>
+
+                    <div class="container-fluid">
+                        <div class="row">
+                            <!-- Sidebar de Navegación -->
+                            <nav class="col-md-2 d-md-block bg-light sidebar">
+                                <div class="position-sticky pt-3">
+                                    <ul class="nav flex-column">
+                                        <li class="nav-item">
+                                            <a class="nav-link nav-section ${this.currentSection === 'dashboard' ? 'active' : ''}" 
+                                               href="#" data-section="dashboard">
+                                                <i class="fas fa-tachometer-alt me-2"></i>Dashboard
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link nav-section ${this.currentSection === 'ventas' ? 'active' : ''}" 
+                                               href="#" data-section="ventas">
+                                                <i class="fas fa-cash-register me-2"></i>Control de Ventas
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link nav-section ${this.currentSection === 'inventario' ? 'active' : ''}" 
+                                               href="#" data-section="inventario">
+                                                <i class="fas fa-boxes me-2"></i>Inventario
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link nav-section ${this.currentSection === 'empleados' ? 'active' : ''}" 
+                                               href="#" data-section="empleados">
+                                                <i class="fas fa-users me-2"></i>Empleados
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link nav-section ${this.currentSection === 'finanzas' ? 'active' : ''}" 
+                                               href="#" data-section="finanzas">
+                                                <i class="fas fa-chart-line me-2"></i>Finanzas
+                                            </a>
+                                        </li>
+                                        <li class="nav-item">
+                                            <a class="nav-link nav-section ${this.currentSection === 'reportes' ? 'active' : ''}" 
+                                               href="#" data-section="reportes">
+                                                <i class="fas fa-file-alt me-2"></i>Reportes
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </nav>
+
+                            <!-- Contenido Principal -->
+                            <main class="col-md-10 ms-sm-auto px-md-4">
+                                <div id="adminContent">
+                                    ${this.renderSection(this.currentSection)}
+                                </div>
+                            </main>
+                        </div>
+                    </div>
+                `;
+
+                // Inicializar gráficos si es necesario
+                setTimeout(() => {
+                    if (this.currentSection === 'dashboard' || this.currentSection === 'finanzas') {
+                        this.initCharts();
+                    }
+                }, 100);
+            }
+
+            navigateToSection(section) {
+                this.currentSection = section;
+                
+                // Actualizar navegación activa
+                document.querySelectorAll('.nav-section').forEach(nav => {
+                    nav.classList.remove('active');
+                });
+                document.querySelector(`[data-section="${section}"]`).classList.add('active');
+                
+                // Actualizar contenido
+                document.getElementById('adminContent').innerHTML = this.renderSection(section);
+                
+                // Inicializar gráficos si es necesario
+                setTimeout(() => {
+                    if (section === 'dashboard' || section === 'finanzas') {
+                        this.initCharts();
+                    }
+                }, 100);
+            }
+
+            renderSection(section) {
+                switch (section) {
+                    case 'dashboard':
+                        return this.renderDashboard();
+                    case 'ventas':
+                        return this.renderVentas();
+                    case 'inventario':
+                        return this.renderInventario();
+                    case 'empleados':
+                        return this.renderEmpleados();
+                    case 'finanzas':
+                        return this.renderFinanzas();
+                    case 'reportes':
+                        return this.renderReportes();
+                    default:
+                        return '<h2>Sección no encontrada</h2>';
+                }
+            }
+
+            renderDashboard() {
+                const ventasHoy = this.salesData.filter(s => s.fecha === '2025-07-20').reduce((sum, s) => sum + s.total, 0);
+                const ventasMes = this.salesData.reduce((sum, s) => sum + s.total, 0);
+                const productosStock = this.inventoryData.reduce((sum, p) => sum + p.stock, 0);
+                const alertasStock = this.inventoryData.filter(p => p.stock <= p.minimo).length;
+
+                return `
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">📊 Dashboard de Administración</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group me-2">
+                                <button type="button" class="btn btn-sm btn-outline-secondary" id="exportSalesBtn">
+                                    <i class="fas fa-download me-1"></i>Exportar Datos
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPIs Principales -->
+                    <div class="row mb-4">
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6>Ventas Hoy</h6>
+                                            <h3>$${ventasHoy.toFixed(2)}</h3>
+                                            <small>+12% vs ayer</small>
+                                        </div>
+                                        <i class="fas fa-dollar-sign fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6>Ventas del Mes</h6>
+                                            <h3>$${ventasMes.toFixed(2)}</h3>
+                                            <small>Meta: $3,000</small>
+                                        </div>
+                                        <i class="fas fa-chart-line fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6>Productos en Stock</h6>
+                                            <h3>${productosStock}</h3>
+                                            <small>5 categorías</small>
+                                        </div>
+                                        <i class="fas fa-boxes fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <div class="card bg-danger text-white">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <div>
+                                            <h6>Alertas de Stock</h6>
+                                            <h3>${alertasStock}</h3>
+                                            <small>Requieren atención</small>
+                                        </div>
+                                        <i class="fas fa-exclamation-triangle fa-2x opacity-75"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Gráfico de Ventas -->
+                        <div class="col-lg-8 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>📈 Tendencia de Ventas (Últimos 7 días)</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="salesTrendChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Actividad de Empleados -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>👥 Rendimiento de Empleados Hoy</h5>
+                                </div>
+                                <div class="card-body">
+                                    ${this.employeeActivity.map(emp => `
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <div>
+                                                <h6 class="mb-0">${emp.empleado}</h6>
+                                                <small class="text-muted">${emp.ventasHoy} ventas - $${emp.totalHoy.toFixed(2)}</small>
+                                            </div>
+                                            <div class="text-end">
+                                                <span class="badge ${emp.eficiencia >= 95 ? 'bg-success' : emp.eficiencia >= 85 ? 'bg-warning' : 'bg-danger'}">${emp.eficiencia}%</span>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Alertas y Notificaciones -->
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
+                                <div class="card-header bg-warning text-dark">
+                                    <h5>⚠️ Alertas del Sistema</h5>
+                                </div>
+                                <div class="card-body">
+                                    <div class="row">
+                                        ${this.inventoryData.filter(p => p.stock <= p.minimo).map(producto => `
+                                            <div class="col-md-4 mb-2">
+                                                <div class="alert alert-warning mb-0">
+                                                    <strong>${producto.producto}</strong><br>
+                                                    <small>Stock: ${producto.stock} (Mínimo: ${producto.minimo})</small>
+                                                </div>
+                                            </div>
+                                        `).join('')}
+                                        ${this.inventoryData.filter(p => p.stock <= p.minimo).length === 0 ? 
+                                            '<div class="col-12"><p class="text-muted mb-0">No hay alertas de stock en este momento</p></div>' : ''}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderVentas() {
+                return `
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">💰 Control de Ventas</h1>
+                    </div>
+
+                    <!-- Resumen de Ventas -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body text-center">
+                                    <h4>${this.salesData.filter(s => s.fecha === '2025-07-20').length}</h4>
+                                    <p>Ventas Hoy</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-success text-white">
+                                <div class="card-body text-center">
+                                    <h4>$${this.salesData.filter(s => s.fecha === '2025-07-20').reduce((sum, s) => sum + s.total, 0).toFixed(2)}</h4>
+                                    <p>Ingresos Hoy</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card bg-info text-white">
+                                <div class="card-body text-center">
+                                    <h4>$${(this.salesData.filter(s => s.fecha === '2025-07-20').reduce((sum, s) => sum + s.total, 0) / this.salesData.filter(s => s.fecha === '2025-07-20').length).toFixed(2)}</h4>
+                                    <p>Ticket Promedio</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Ventas -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>📋 Registro de Ventas Recientes</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Fecha</th>
+                                            <th>Hora</th>
+                                            <th>Empleado</th>
+                                            <th>Productos</th>
+                                            <th>Total</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${this.salesData.slice(0, 10).map(venta => `
+                                            <tr>
+                                                <td>#${venta.id.toString().padStart(4, '0')}</td>
+                                                <td>${venta.fecha}</td>
+                                                <td>${venta.hora}</td>
+                                                <td>${venta.empleado}</td>
+                                                <td><span class="badge bg-info">${venta.productos}</span></td>
+                                                <td class="fw-bold text-success">$${venta.total.toFixed(2)}</td>
+                                                <td><span class="badge bg-success">Completada</span></td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderInventario() {
+                return `
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">📦 Control de Inventario</h1>
+                    </div>
+
+                    <!-- Estado del Inventario -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card border-success">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-check-circle fa-2x text-success mb-2"></i>
+                                    <h4 class="text-success">${this.inventoryData.filter(p => p.stock > p.minimo).length}</h4>
+                                    <p>Stock Normal</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-warning">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-exclamation-triangle fa-2x text-warning mb-2"></i>
+                                    <h4 class="text-warning">${this.inventoryData.filter(p => p.stock <= p.minimo && p.stock > 0).length}</h4>
+                                    <p>Stock Bajo</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-danger">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-times-circle fa-2x text-danger mb-2"></i>
+                                    <h4 class="text-danger">${this.inventoryData.filter(p => p.stock === 0).length}</h4>
+                                    <p>Sin Stock</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-info">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-dollar-sign fa-2x text-info mb-2"></i>
+                                    <h4 class="text-info">$${this.inventoryData.reduce((sum, p) => sum + (p.stock * p.precio), 0).toFixed(0)}</h4>
+                                    <p>Valor Inventario</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Inventario -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>📋 Estado Actual del Inventario</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Producto</th>
+                                            <th>Categoría</th>
+                                            <th>Stock Actual</th>
+                                            <th>Stock Mínimo</th>
+                                            <th>Precio</th>
+                                            <th>Valor Total</th>
+                                            <th>Estado</th>
+                                            <th>Última Entrada</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${this.inventoryData.map(producto => `
+                                            <tr>
+                                                <td><strong>${producto.producto}</strong></td>
+                                                <td><span class="badge bg-secondary">${producto.categoria}</span></td>
+                                                <td class="text-center">${producto.stock}</td>
+                                                <td class="text-center">${producto.minimo}</td>
+                                                <td>$${producto.precio.toFixed(2)}</td>
+                                                <td class="fw-bold">$${(producto.stock * producto.precio).toFixed(2)}</td>
+                                                <td>
+                                                    ${producto.stock > producto.minimo ? 
+                                                        '<span class="badge bg-success">Normal</span>' : 
+                                                        producto.stock > 0 ? 
+                                                            '<span class="badge bg-warning">Bajo</span>' : 
+                                                            '<span class="badge bg-danger">Agotado</span>'}
+                                                </td>
+                                                <td>${producto.ultimaEntrada}</td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderEmpleados() {
+                return `
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">👥 Gestión de Empleados</h1>
+                    </div>
+
+                    <!-- Métricas de Empleados -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body text-center">
+                                    <h4>${this.employeeActivity.length}</h4>
+                                    <p>Empleados Activos</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body text-center">
+                                    <h4>${this.employeeActivity.reduce((sum, emp) => sum + emp.ventasHoy, 0)}</h4>
+                                    <p>Ventas Totales Hoy</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body text-center">
+                                    <h4>${(this.employeeActivity.reduce((sum, emp) => sum + emp.eficiencia, 0) / this.employeeActivity.length).toFixed(0)}%</h4>
+                                    <p>Eficiencia Promedio</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body text-center">
+                                    <h4>$${this.employeeActivity.reduce((sum, emp) => sum + emp.totalHoy, 0).toFixed(0)}</h4>
+                                    <p>Ingresos Generados</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tabla de Rendimiento -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>📊 Rendimiento de Empleados Hoy</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th>Empleado</th>
+                                            <th>Ventas</th>
+                                            <th>Total Vendido</th>
+                                            <th>Horas Trabajadas</th>
+                                            <th>Venta/Hora</th>
+                                            <th>Eficiencia</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${this.employeeActivity.map(empleado => `
+                                            <tr>
+                                                <td><strong>${empleado.empleado}</strong></td>
+                                                <td class="text-center">${empleado.ventasHoy}</td>
+                                                <td class="fw-bold text-success">$${empleado.totalHoy.toFixed(2)}</td>
+                                                <td class="text-center">${empleado.horasTrabajaadas}h</td>
+                                                <td>$${(empleado.totalHoy / empleado.horasTrabajaadas).toFixed(2)}</td>
+                                                <td>
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="progress me-2" style="width: 60px;">
+                                                            <div class="progress-bar ${empleado.eficiencia >= 95 ? 'bg-success' : empleado.eficiencia >= 85 ? 'bg-warning' : 'bg-danger'}" 
+                                                                 style="width: ${empleado.eficiencia}%"></div>
+                                                        </div>
+                                                        <span class="small">${empleado.eficiencia}%</span>
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <span class="badge ${empleado.eficiencia >= 95 ? 'bg-success' : empleado.eficiencia >= 85 ? 'bg-warning' : 'bg-danger'}">
+                                                        ${empleado.eficiencia >= 95 ? 'Excelente' : empleado.eficiencia >= 85 ? 'Bueno' : 'Mejorar'}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        `).join('')}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderFinanzas() {
+                const ventasTotal = this.salesData.reduce((sum, s) => sum + s.total, 0);
+                const costoInventario = this.inventoryData.reduce((sum, p) => sum + (p.stock * p.precio * 0.6), 0); // 60% del precio de venta
+                const gananciaBruta = ventasTotal - costoInventario;
+                const margenGanancia = ((gananciaBruta / ventasTotal) * 100);
+
+                return `
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">💼 Análisis Financiero</h1>
+                    </div>
+
+                    <!-- KPIs Financieros -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card bg-success text-white">
+                                <div class="card-body text-center">
+                                    <h4>$${ventasTotal.toFixed(2)}</h4>
+                                    <p>Ingresos Totales</p>
+                                    <small>Último período</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-warning text-white">
+                                <div class="card-body text-center">
+                                    <h4>$${costoInventario.toFixed(2)}</h4>
+                                    <p>Costo de Inventario</p>
+                                    <small>Valor estimado</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-info text-white">
+                                <div class="card-body text-center">
+                                    <h4>$${gananciaBruta.toFixed(2)}</h4>
+                                    <p>Ganancia Bruta</p>
+                                    <small>Estimada</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card bg-primary text-white">
+                                <div class="card-body text-center">
+                                    <h4>${margenGanancia.toFixed(1)}%</h4>
+                                    <p>Margen de Ganancia</p>
+                                    <small>Porcentaje</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <!-- Gráfico Financiero -->
+                        <div class="col-lg-8 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>📈 Análisis de Ingresos por Día</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="financialChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Distribución de Ventas -->
+                        <div class="col-lg-4 mb-4">
+                            <div class="card">
+                                <div class="card-header">
+                                    <h5>🥧 Distribución por Empleado</h5>
+                                </div>
+                                <div class="card-body">
+                                    <canvas id="employeeDistributionChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Proyecciones -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>🔮 Proyecciones y Objetivos</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <h6>Meta Mensual</h6>
+                                    <div class="progress mb-2">
+                                        <div class="progress-bar bg-success" style="width: ${(ventasTotal / 3000) * 100}%"></div>
+                                    </div>
+                                    <small>$${ventasTotal.toFixed(2)} / $3,000.00 (${((ventasTotal / 3000) * 100).toFixed(1)}%)</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Proyección Diaria</h6>
+                                    <p class="mb-0">$${(ventasTotal / 7).toFixed(2)} promedio/día</p>
+                                    <small class="text-muted">Basado en últimos 7 días</small>
+                                </div>
+                                <div class="col-md-4">
+                                    <h6>Crecimiento Estimado</h6>
+                                    <p class="mb-0 text-success">+15.3%</p>
+                                    <small class="text-muted">Vs. período anterior</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            renderReportes() {
+                return `
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">📋 Centro de Reportes</h1>
+                    </div>
+
+                    <!-- Opciones de Reportes -->
+                    <div class="row mb-4">
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-chart-bar fa-3x text-primary mb-3"></i>
+                                    <h5>Reporte de Ventas</h5>
+                                    <p class="text-muted">Análisis detallado de ventas por período</p>
+                                    <button class="btn btn-primary" onclick="alert('Generando reporte de ventas...')">
+                                        <i class="fas fa-download me-1"></i>Generar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-boxes fa-3x text-success mb-3"></i>
+                                    <h5>Reporte de Inventario</h5>
+                                    <p class="text-muted">Estado actual y movimientos de stock</p>
+                                    <button class="btn btn-success" onclick="alert('Generando reporte de inventario...')">
+                                        <i class="fas fa-download me-1"></i>Generar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <i class="fas fa-users fa-3x text-warning mb-3"></i>
+                                    <h5>Reporte de Empleados</h5>
+                                    <p class="text-muted">Rendimiento y productividad del personal</p>
+                                    <button class="btn btn-warning" onclick="alert('Generando reporte de empleados...')">
+                                        <i class="fas fa-download me-1"></i>Generar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Resumen Ejecutivo -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h5>📊 Resumen Ejecutivo - Último Período</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <h6>🏆 Logros Principales</h6>
+                                    <ul>
+                                        <li>Incremento del 15.3% en ventas vs. período anterior</li>
+                                        <li>Eficiencia promedio del equipo: ${(this.employeeActivity.reduce((sum, emp) => sum + emp.eficiencia, 0) / this.employeeActivity.length).toFixed(0)}%</li>
+                                        <li>Solo ${this.inventoryData.filter(p => p.stock <= p.minimo).length} productos con stock bajo</li>
+                                        <li>Margen de ganancia estimado: ${((this.salesData.reduce((sum, s) => sum + s.total, 0) - this.inventoryData.reduce((sum, p) => sum + (p.stock * p.precio * 0.6), 0)) / this.salesData.reduce((sum, s) => sum + s.total, 0) * 100).toFixed(1)}%</li>
+                                    </ul>
+                                </div>
+                                <div class="col-md-6">
+                                    <h6>⚠️ Áreas de Mejora</h6>
+                                    <ul>
+                                        <li>Optimizar inventario de productos con stock bajo</li>
+                                        <li>Capacitar empleados con eficiencia menor al 90%</li>
+                                        <li>Implementar promociones para productos de lenta rotación</li>
+                                        <li>Revisar precios según margen de ganancia objetivo</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            initCharts() {
+                // Gráfico de tendencia de ventas
+                const salesTrendCtx = document.getElementById('salesTrendChart');
+                if (salesTrendCtx) {
+                    new Chart(salesTrendCtx, {
+                        type: 'line',
+                        data: {
+                            labels: ['14 Jul', '15 Jul', '16 Jul', '17 Jul', '18 Jul', '19 Jul', '20 Jul'],
+                            datasets: [{
+                                label: 'Ventas Diarias ($)',
+                                data: [420, 380, 450, 290, 655, 646, 746],
+                                borderColor: 'rgb(75, 192, 192)',
+                                backgroundColor: 'rgba(75, 192, 192, 0.1)',
+                                tension: 0.1,
+                                fill: true
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            scales: {
+                                y: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Gráfico financiero
+                const financialCtx = document.getElementById('financialChart');
+                if (financialCtx) {
+                    new Chart(financialCtx, {
+                        type: 'bar',
+                        data: {
+                            labels: ['Ingresos', 'Costos', 'Ganancia'],
+                            datasets: [{
+                                label: 'Monto ($)',
+                                data: [
+                                    this.salesData.reduce((sum, s) => sum + s.total, 0),
+                                    this.inventoryData.reduce((sum, p) => sum + (p.stock * p.precio * 0.6), 0),
+                                    this.salesData.reduce((sum, s) => sum + s.total, 0) - this.inventoryData.reduce((sum, p) => sum + (p.stock * p.precio * 0.6), 0)
+                                ],
+                                backgroundColor: ['#28a745', '#ffc107', '#17a2b8']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                legend: {
+                                    display: false
+                                }
+                            }
+                        }
+                    });
+                }
+
+                // Gráfico de distribución por empleado
+                const empDistCtx = document.getElementById('employeeDistributionChart');
+                if (empDistCtx) {
+                    new Chart(empDistCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: this.employeeActivity.map(emp => emp.empleado.split(' ')[0]),
+                            datasets: [{
+                                data: this.employeeActivity.map(emp => emp.totalHoy),
+                                backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0']
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false
+                        }
+                    });
+                }
+            }
+
+            exportSalesReport() {
+                this.showToast('Generando reporte de ventas...', 'info');
+                setTimeout(() => {
+                    this.showToast('Reporte exportado exitosamente', 'success');
+                }, 2000);
+            }
+
+            refreshAllData() {
+                this.showToast('Actualizando datos del sistema...', 'info');
+                setTimeout(() => {
+                    this.showToast('Datos actualizados correctamente', 'success');
+                    // Recargar la sección actual
+                    this.navigateToSection(this.currentSection);
+                }, 1500);
+            }
+
+            showToast(message, type = 'info') {
+                let toastContainer = document.getElementById('toastContainer');
+                if (!toastContainer) {
+                    toastContainer = document.createElement('div');
+                    toastContainer.id = 'toastContainer';
+                    toastContainer.className = 'position-fixed top-0 end-0 p-3';
+                    toastContainer.style.zIndex = '1050';
+                    document.body.appendChild(toastContainer);
+                }
+
+                const toastId = 'toast' + Date.now();
+                const bgClass = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : type === 'warning' ? 'bg-warning' : 'bg-info';
+                
+                const toastHtml = `
+                    <div id="${toastId}" class="toast ${bgClass} text-white" role="alert">
+                        <div class="toast-body">
+                            <i class="fas fa-${type === 'success' ? 'check' : type === 'error' ? 'times' : type === 'warning' ? 'exclamation-triangle' : 'info'}-circle me-2"></i>
+                            ${message}
+                        </div>
+                    </div>
+                `;
+
+                toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+                
+                const toastElement = document.getElementById(toastId);
+                const toast = new bootstrap.Toast(toastElement, { delay: 3000 });
+                toast.show();
+
+                setTimeout(() => {
+                    toastElement.remove();
+                }, 4000);
+            }
+        }
+
+        // Inicializar panel de administración
+        document.addEventListener('DOMContentLoaded', () => {
+            window.adminPanel = new AdminPanel();
+        });
+
+        console.log('🔐 Panel de Administración cargado correctamente');
+    </script>
+
+    <style>
+        .sidebar {
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+            padding: 48px 0 0;
+            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+        }
+
+        .sidebar .nav-link {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .sidebar .nav-link.active {
+            color: #007bff;
+            background-color: rgba(0, 123, 255, .1);
+        }
+
+        main {
+            margin-left: 240px;
+        }
+
+        @media (max-width: 767.98px) {
+            .sidebar {
+                top: 5rem;
+            }
+            main {
+                margin-left: 0;
+            }
+        }
+
+        .card {
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+            border: 1px solid rgba(0, 0, 0, 0.125);
+        }
+
+        .progress {
+            height: 8px;
+        }
+    </style>
+</body>
+</html>
